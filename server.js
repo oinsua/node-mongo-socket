@@ -2,7 +2,7 @@ import {Server as WebSocketServer} from 'socket.io';
 import { createServer } from 'http';
 import app from './app.js';
 import { db_connect } from './db.js';
-import sockets from './sockets.js';
+import sockets from './src/sockets/index.js';
 
 //connect to mongodb atlas
 db_connect();
@@ -14,13 +14,11 @@ server.listen(app.get('PORT'), () => {
 })
 
 //socket.io
-const io = new WebSocketServer(server);
-io.on('connection', (socket) => {
-    console.log('user connected');
-    socket.on('disconnect', function () {
-      console.log('user disconnected');
-    });
-  })
+const io = new WebSocketServer(server, { cors: {
+  origin: "http://localhost:3006",
+  methods: ["GET", "POST"]
+}});
+sockets(io);
 
 
 

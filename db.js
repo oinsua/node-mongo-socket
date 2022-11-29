@@ -1,4 +1,4 @@
-import { connect }  from "mongoose";
+import mongoose, { connect }  from "mongoose";
 import { MONGODB_URL } from "./config.js";
 
 export const db_connect = async () => {
@@ -10,3 +10,7 @@ export const db_connect = async () => {
         console.log(error);
     }
 };
+
+process.on('uncaughtException', () => {
+    mongoose.connection.disconnect()
+})
