@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { PORT } from './config.js';
 import cors from 'cors';
+import routes from './src/route/userRoute.js';
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.get('/', (req, res) => {
     console.log(`Welcome to ${app.get('AppName')}`)
     res.status(200).send(`Welcome to ${app.get('AppName')}....`);
 })
+
+app.use(routes)
 
 //middleware
 app.use(express.static(path.join(__dirname, 'public')));
