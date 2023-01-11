@@ -25,22 +25,22 @@ export const createUser = async (req, res) => {
             password: bcryptPass 
         })
 
-        if(roles){ //Si se la variable roles entonces se procede a incorporarla
-            const res_roles = await RolModel.find({name: {$in: roles}}) //Buscar los roles que son iguales
-            user.rol = res_roles.map(rol => rol._id); //Se recorre el array para obtener solo los id 
+        if(roles){ //If exist rol variable, then add
+            const res_roles = await RolModel.find({name: {$in: roles}}) //find roles that is equal
+            user.rol = res_roles.map(rol => rol._id); //the array is traversed to get only the id 
         }
         else{
-            const rol = await RolModel.findOne({name: "user"}); //Voy a buscar solo el rol user por defecto
+            const rol = await RolModel.findOne({name: "user"}); //find only the rol for default
             user.rol = [rol._id];
         }
 
-        //Insertar en la base de datos de mongodb el usuario
+        //insert user into mongodb 
         const userInsert = await user.save(); 
 
-        //Crear el jwt para el cliente
+        //Create jwt for the user
         const token = jwt.sign({id: userInsert._id}, SECRET, {expiresIn: 86400});//24 horas
 
-        res.json(token); //Respuesta al cliente del token que se le ha asignado
+        res.json(token); //send the jwt
     } catch (error) {
         res.status(500).json({ message: `"Error at Json Data" ${error}`})
     }
